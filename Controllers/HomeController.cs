@@ -13,6 +13,12 @@ namespace OurSunday.Controllers
             _logger = logger;
         }
 
+        public ddController(ILogger<HomeController> logger)
+        {
+            _logger = logger;
+        }
+
+
         public IActionResult Index()
         {
             return View();
