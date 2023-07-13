@@ -25,3 +25,4 @@ obj/project.nuget.cache
 .vs/OurSunday/FileContentIndex/f37448b8-fa7d-478b-bad3-f0bb35946fee.vsidx
 .vs/OurSunday/FileContentIndex/653d7066-6f2e-4f9a-a682-b4a8ff4cb8a3.vsidx
 .vs/OurSunday/FileContentIndex/22e5d52f-0652-4c68-8f87-784ad690b439.vsidx
+*.vsidx
