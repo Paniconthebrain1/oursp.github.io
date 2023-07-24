@@ -121,10 +121,9 @@ namespace OurSunday.Areas.Admin.Controllers
                 UserName = vm.UserName,
                 FirstName = vm.FristName,
                 LastName = vm.LastName,
-                PasswordHash=vm.Password
             };
 
-            var result = await _userManager.CreateAsync(applicationUser);
+            var result = await _userManager.CreateAsync(applicationUser, vm.Password);
             if (result.Succeeded)
             {
                 if (vm.IsAdmin)
@@ -138,6 +137,7 @@ namespace OurSunday.Areas.Admin.Controllers
                 _notification.Success("User registered successfully");
                 return RedirectToAction("Index", "User", new { area = "Admin" });
             }
+            _notification.Warning("Password doesnot match the requirement.");
             return View(vm);
         }
 

@@ -23,7 +23,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 builder.Services.AddScoped<IDbinitializer, Dbinitializer>();
 
-builder.Services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
+builder.Services.AddNotyf(config => { config.DurationInSeconds = 5; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
