@@ -1,3 +1,5 @@
+using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OurSunday.Data;
@@ -21,10 +23,14 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 
 builder.Services.AddScoped<IDbinitializer, Dbinitializer>();
 
+builder.Services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
+
 
 
 var app = builder.Build();
 DataSeeding();
+
+app.UseNotyf();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -39,6 +45,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

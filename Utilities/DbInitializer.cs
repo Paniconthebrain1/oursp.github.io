@@ -6,17 +6,17 @@ namespace OurSunday.Utilities
 {
     public class Dbinitializer : IDbinitializer
     {
-        private readonly ApplicationDbContext _context ;
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _usermanager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
 
         public Dbinitializer(ApplicationDbContext context,
-                                UserManager<ApplicationUser> userManager,RoleManager<IdentityRole> rolemanager)
+                                UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> rolemanager)
         {
-            _context= context;
-            _usermanager= userManager;
-            _roleManager= rolemanager;  
+            _context = context;
+            _usermanager = userManager;
+            _roleManager = rolemanager;
         }
         public void Initialize()
         {
@@ -36,7 +36,7 @@ namespace OurSunday.Utilities
                 var appuser = _context.ApplicationUsers.FirstOrDefault(x => x.Email == "admin@gmail.com");
                 if (appuser != null)
                 {
-                    _usermanager.AddToRoleAsync(appuser,WebsiteRoles.WebsiteAdmin).GetAwaiter().GetResult();
+                    _usermanager.AddToRoleAsync(appuser, WebsiteRoles.WebsiteAdmin).GetAwaiter().GetResult();
 
                 }
 
