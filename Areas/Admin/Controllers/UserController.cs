@@ -1,8 +1,10 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OurSunday.Models;
+using OurSunday.Utilities;
 using OurSunday.ViewModel;
 
 namespace OurSunday.Areas.Admin.Controllers
@@ -26,10 +28,120 @@ namespace OurSunday.Areas.Admin.Controllers
             _notification = notyfService;
 
         }
-        public IActionResult Index()
+
+        [Authorize(Roles ="admin")]
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var users = await _userManager.Users.ToListAsync();
+            var vm = users.Select(x => new UserVM()
+            {
+                Id = x.Id,
+                FristName = x.FirstName,
+                LastName = x.LastName,
+                UserName = x.UserName,
+                Email = x.Email
+
+            }).ToList();
+
+            return View(vm);
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View( new RegisterVM());
+        }
+
+        //[Authorize(Roles = "admin")]
+        //[HttpPost]
+        //public async Task<IActionResult> Register(RegisterVM vm)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var Checkuserbyemail = await _userManager.FindByEmailAsync(vm.Email);
+        //        if (Checkuserbyemail != null)
+        //        {
+        //            _notification.Error("Email Already Exists");
+        //            return View(vm);
+        //        }
+        //        var checkuserbyusername = await _userManager.FindByNameAsync(vm.UserName);
+        //        if (checkuserbyusername != null)
+        //        {
+        //            _notification.Error("UserName Already Exists");
+        //            return View(vm);
+        //        }
+        //        var applicationUser = new ApplicationUser()
+        //        {
+        //            Email = vm.Email,
+        //            UserName = vm.UserName,
+        //            FirstName = vm.FristName,
+        //            LastName = vm.LastName,
+        //        };
+        //        var result = await _userManager.CreateAsync(applicationUser, vm.Password);
+        //        if (result.Succeeded)
+        //        {
+        //            if (vm.IsAdmin)
+        //            {
+        //                await _userManager.AddToRoleAsync(applicationUser, WebsiteRoles.WebsiteAdmin);
+        //            }
+        //            else
+        //            {
+        //                await _userManager.AddToRoleAsync(applicationUser, WebsiteRoles.WebsiteAuthor);
+
+        //            }
+        //            _notification.Success("User Registered Succesfully.");
+        //            RedirectToAction("Index", "Home", new { area = "Admin" });
+        //        }
+        //    }           
+        //    return View();
+        //}
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterVM vm)
+        {
+            if (!ModelState.IsValid) { return View(vm); }
+            var checkUserByEmail = await _userManager.FindByEmailAsync(vm.Email);
+            if (checkUserByEmail != null)
+            {
+                _notification.Error("Email already exists");
+                return View(vm);
+            }
+            var checkUserByUsername = await _userManager.FindByNameAsync(vm.UserName);
+            if (checkUserByUsername != null)
+            {
+                _notification.Error("Username already exists");
+                return View(vm);
+            }
+
+            var applicationUser = new ApplicationUser()
+            {
+                Email = vm.Email,
+                UserName = vm.UserName,
+                FirstName = vm.FristName,
+                LastName = vm.LastName,
+                PasswordHash=vm.Password
+            };
+
+            var result = await _userManager.CreateAsync(applicationUser);
+            if (result.Succeeded)
+            {
+                if (vm.IsAdmin)
+                {
+                    await _userManager.AddToRoleAsync(applicationUser, WebsiteRoles.WebsiteAdmin);
+                }
+                else
+                {
+                    await _userManager.AddToRoleAsync(applicationUser, WebsiteRoles.WebsiteAuthor);
+                }
+                _notification.Success("User registered successfully");
+                return RedirectToAction("Index", "User", new { area = "Admin" });
+            }
+            return View(vm);
+        }
+
+
 
         [HttpGet("Login")]
         public IActionResult Login()

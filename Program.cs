@@ -25,7 +25,10 @@ builder.Services.AddScoped<IDbinitializer, Dbinitializer>();
 
 builder.Services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
 
-
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/login";
+});
 
 var app = builder.Build();
 DataSeeding();
