@@ -44,7 +44,57 @@ namespace OurSunday.Areas.Admin.Controllers
 
             }).ToList();
 
+            foreach (var user in vm)
+            {
+                var singleuser = await _userManager.FindByIdAsync(user.Id);
+                var role = await _userManager.GetRolesAsync(singleuser);
+
+                user.Role= role.FirstOrDefault();
+            }
+
             return View(vm);
+        }
+
+
+        [Authorize(Roles = "admin")]
+        [HttpGet]
+        public async Task<IActionResult> ResetPassword(string id)
+        {
+            var existinguser =  await _userManager.FindByIdAsync(id);
+            if(existinguser == null)
+            {
+                _notification.Error("User Doesnot exists");
+                return View();
+            }
+            var vm = new ResetPasswordVM()
+            {
+                id= existinguser.Id,
+                Username = existinguser.FirstName,
+            };
+            return View(vm);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordVM vm)
+        {
+            if (!ModelState.IsValid) { return View(vm); }
+            var existinguser = await _userManager.FindByIdAsync(vm.id);
+            if (existinguser == null)
+            {
+                _notification.Error("User Doesnot exists");
+                return View(vm);
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(existinguser);
+            var result= await _userManager.ResetPasswordAsync(existinguser, token, vm.Newpassword);
+            if (result.Succeeded)
+            {
+                _notification.Success("Password Reset Succesful");
+                return RedirectToAction(nameof(Index));
+            }
+            return View(vm);
+            
         }
 
         [Authorize(Roles = "admin")]
@@ -54,49 +104,7 @@ namespace OurSunday.Areas.Admin.Controllers
             return View( new RegisterVM());
         }
 
-        //[Authorize(Roles = "admin")]
-        //[HttpPost]
-        //public async Task<IActionResult> Register(RegisterVM vm)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var Checkuserbyemail = await _userManager.FindByEmailAsync(vm.Email);
-        //        if (Checkuserbyemail != null)
-        //        {
-        //            _notification.Error("Email Already Exists");
-        //            return View(vm);
-        //        }
-        //        var checkuserbyusername = await _userManager.FindByNameAsync(vm.UserName);
-        //        if (checkuserbyusername != null)
-        //        {
-        //            _notification.Error("UserName Already Exists");
-        //            return View(vm);
-        //        }
-        //        var applicationUser = new ApplicationUser()
-        //        {
-        //            Email = vm.Email,
-        //            UserName = vm.UserName,
-        //            FirstName = vm.FristName,
-        //            LastName = vm.LastName,
-        //        };
-        //        var result = await _userManager.CreateAsync(applicationUser, vm.Password);
-        //        if (result.Succeeded)
-        //        {
-        //            if (vm.IsAdmin)
-        //            {
-        //                await _userManager.AddToRoleAsync(applicationUser, WebsiteRoles.WebsiteAdmin);
-        //            }
-        //            else
-        //            {
-        //                await _userManager.AddToRoleAsync(applicationUser, WebsiteRoles.WebsiteAuthor);
-
-        //            }
-        //            _notification.Success("User Registered Succesfully.");
-        //            RedirectToAction("Index", "Home", new { area = "Admin" });
-        //        }
-        //    }           
-        //    return View();
-        //}
+       
         [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM vm)
