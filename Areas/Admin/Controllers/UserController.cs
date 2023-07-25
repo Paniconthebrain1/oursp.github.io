@@ -154,11 +154,11 @@ namespace OurSunday.Areas.Admin.Controllers
         [HttpGet("Login")]
         public IActionResult Login()
         {
-            if (!HttpContext.User.Identity.IsAuthenticated)
+            if (!HttpContext.User.Identity!.IsAuthenticated)
             {
                 return View(new LoginVM());
             }
-            return RedirectToAction("Index", "User", new { area = "Admin" });
+            return RedirectToAction("Index", "Post", new { area = "Admin" });
 
         }
 
@@ -184,16 +184,25 @@ namespace OurSunday.Areas.Admin.Controllers
             await _signInManager.PasswordSignInAsync(vm.Username, vm.Password, vm.RememberMe, true);
             _notification.Success("Logged In Succesfully");
 
-            return RedirectToAction("Index", "User", new { area = "Admin" });
+            return RedirectToAction("Index", "Post", new { area = "Admin" });
 
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Logout()
         {
             _signInManager.SignOutAsync();
             _notification.Success("Logged out Success");
             return RedirectToAction("Index", "Home" , new {area = ""});
         }
+
+        [HttpGet("AccessDenied")]
+        [Authorize]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
     }
 }
