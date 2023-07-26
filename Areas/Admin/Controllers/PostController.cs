@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using OurSunday.Data;
 using OurSunday.Models;
+using OurSunday.Utilities;
 using OurSunday.ViewModel;
 using System.Runtime.InteropServices;
 
@@ -29,10 +30,34 @@ namespace OurSunday.Areas.Admin.Controllers
         }
 
 
-
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+
+            var listofpost = new List<Post>();
+
+            var loggedInUser = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
+            var loggedInUserRole = await _userManager.GetRolesAsync(loggedInUser);
+            if (loggedInUserRole[0] == WebsiteRoles.WebsiteAdmin)
+            {
+                listofpost = await _context.Posts.Include(x => x.ApplicationUser).ToListAsync();
+            }
+            else
+            {
+                listofpost = await _context.Posts!.Include(x => x.ApplicationUser).Where(x => x.ApplicationUser!.Id == loggedInUser!.Id).ToListAsync();
+            }
+
+            var listOfPostVM = listofpost.Select(x => new PostVM()
+            {
+                Id=x.Id,
+                Title=x.Title,
+                CreatedDate=x.CreateDate,
+                ThumbnailUrl=x.ThumbnailUrl,
+                AuthorName=x.ApplicationUser!.FirstName + " " + x.ApplicationUser!.LastName
+
+
+            }).ToList();
+            return View(listOfPostVM);  
         }
 
         [HttpGet]
@@ -49,7 +74,7 @@ namespace OurSunday.Areas.Admin.Controllers
 
             //get login id 
 
-            var loggedInUser = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
+            var loggedInUser = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == User.Identity!.Name);
 
             var post = new Post();
 
@@ -77,6 +102,22 @@ namespace OurSunday.Areas.Admin.Controllers
             return RedirectToAction("Index");
 
 
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var post = await _context.Posts!.FirstOrDefaultAsync(x=> x.Id == id);    
+            var loggedInUser = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == User.Identity!.Name);
+            var loggedInUserRole = await _userManager.GetRolesAsync(loggedInUser!);
+            if (loggedInUserRole[0] == WebsiteRoles.WebsiteAdmin || loggedInUser?.Id== post!.ApplicationUserid)
+            {
+
+            }
+
+
+            return RedirectToAction("Index","Post", new {area = "Admin"});
         }
 
 
