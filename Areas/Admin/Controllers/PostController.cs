@@ -36,8 +36,8 @@ namespace OurSunday.Areas.Admin.Controllers
 
             var listofpost = new List<Post>();
 
-            var loggedInUser = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == User.Identity.Name);
-            var loggedInUserRole = await _userManager.GetRolesAsync(loggedInUser);
+            var loggedInUser = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == User.Identity!.Name);
+            var loggedInUserRole = await _userManager.GetRolesAsync(loggedInUser!);
             if (loggedInUserRole[0] == WebsiteRoles.WebsiteAdmin)
             {
                 listofpost = await _context.Posts.Include(x => x.ApplicationUser).ToListAsync();
@@ -113,11 +113,13 @@ namespace OurSunday.Areas.Admin.Controllers
             var loggedInUserRole = await _userManager.GetRolesAsync(loggedInUser!);
             if (loggedInUserRole[0] == WebsiteRoles.WebsiteAdmin || loggedInUser?.Id== post!.ApplicationUserid)
             {
+                _context.Posts!. (post!);
+                await _context.SaveChangesAsync();
+                _notification.Success("Post Deleted Succesfully");
+                return RedirectToAction("Index", "Post", new { area = "Admin" });
 
             }
-
-
-            return RedirectToAction("Index","Post", new {area = "Admin"});
+            return View();
         }
 
 
