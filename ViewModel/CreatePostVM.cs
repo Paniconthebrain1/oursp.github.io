@@ -13,7 +13,6 @@ namespace OurSunday.ViewModel
         public string? ApplicationUserid { get; set; }
         public string? Description { get; set; }
         public string? ThumbnailUrl { get; set; }
-        public IFormFile? Thumbnail { get; set; }
-
+        public IFormFile? Thumbnail { get; set; }       
     }
 }
