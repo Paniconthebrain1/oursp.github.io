@@ -58,7 +58,7 @@
                 </a>
             </li>
 
-            @if (User.IsInRole("admin"))
+            @if (User.IsInRole("Admin"))
             {
                 <li class="nav-item active">
                     <a class="nav-link" asp-action="Index" asp-controller="User" asp-area="Admin" >
@@ -86,6 +86,12 @@
                             <a class="collapse-item" asp-area="Admin" asp-controller="Page" asp-action="Privacy">Privacy Policy</a>
                         </div>
                     </div>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" asp-action="Settings" asp-controller="Setting" asp-area="Admin">
+                        <i class="fas fa-fw fa-gear"></i>
+                        <span>Setting</span>
+                    </a>
                 </li>
 
                 <!-- Divider -->

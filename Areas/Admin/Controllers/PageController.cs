@@ -11,7 +11,7 @@ using OurSunday.ViewModel;
 namespace OurSunday.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "Admin")]
 
     public class PageController : Controller
     {

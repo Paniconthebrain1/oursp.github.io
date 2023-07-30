@@ -13,6 +13,7 @@ namespace OurSunday.Areas.Admin.Controllers
 {
     [Area("Admin")]
 
+
     public class PostController : Controller
     {
 
@@ -31,6 +32,7 @@ namespace OurSunday.Areas.Admin.Controllers
 
 
         [HttpGet]
+
         public async Task<IActionResult> Index()
         {
 

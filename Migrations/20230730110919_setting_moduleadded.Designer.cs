@@ -12,8 +12,8 @@ using OurSunday.Data;
 namespace OurSunday.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230730065640_thumb111")]
-    partial class thumb111
+    [Migration("20230730110919_setting_moduleadded")]
+    partial class setting_moduleadded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -293,6 +293,40 @@ namespace OurSunday.Migrations
                     b.HasIndex("ApplicationUserid");
 
                     b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("OurSunday.Models.Setting", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("FacebookUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GithubUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShortDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SiteName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ThumbnailUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TwitterUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Settings");
                 });
 
             modelBuilder.Entity("OurSunday.Models.ApplicationUser", b =>

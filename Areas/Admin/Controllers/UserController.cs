@@ -10,6 +10,8 @@ using OurSunday.ViewModel;
 namespace OurSunday.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    
+
 
     public class UserController : Controller
     {
@@ -29,7 +31,7 @@ namespace OurSunday.Areas.Admin.Controllers
 
         }
 
-        [Authorize(Roles ="admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -56,7 +58,7 @@ namespace OurSunday.Areas.Admin.Controllers
         }
 
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> ResetPassword(string id)
         {
@@ -74,7 +76,7 @@ namespace OurSunday.Areas.Admin.Controllers
             return View(vm);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordVM vm)
         {
@@ -97,7 +99,7 @@ namespace OurSunday.Areas.Admin.Controllers
             
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Register()
         {
@@ -105,7 +107,7 @@ namespace OurSunday.Areas.Admin.Controllers
         }
 
        
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM vm)
         {
