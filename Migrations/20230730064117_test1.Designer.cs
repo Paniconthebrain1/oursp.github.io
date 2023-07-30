@@ -12,8 +12,8 @@ using OurSunday.Data;
 namespace OurSunday.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230713072821_firstmigration")]
-    partial class Firstmigration
+    [Migration("20230730064117_test1")]
+    partial class test1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -248,6 +248,9 @@ namespace OurSunday.Migrations
                     b.Property<string>("Slug")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ThumbnailUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -277,6 +280,9 @@ namespace OurSunday.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Slug")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ThumbnailUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")

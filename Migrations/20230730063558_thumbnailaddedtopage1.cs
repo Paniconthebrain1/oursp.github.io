@@ -5,7 +5,7 @@
 namespace OurSunday.Migrations
 {
     /// <inheritdoc />
-    public partial class Firstmigration : Migration
+    public partial class thumbnailaddedtopage1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

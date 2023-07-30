@@ -245,6 +245,9 @@ namespace OurSunday.Migrations
                     b.Property<string>("Slug")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ThumbnailUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -274,6 +277,9 @@ namespace OurSunday.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Slug")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ThumbnailUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
