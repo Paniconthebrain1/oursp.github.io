@@ -1,4 +1,9 @@
-﻿@model OurSunday.ViewModel.HomeVM;
+﻿
+@model OurSunday.ViewModel.HomeVM;
+
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
 
 @{
     ViewData["Title"] = "Home Page";
@@ -35,7 +40,7 @@
             @foreach(var post in Model.Posts!)
             {
                 <div class="post-preview">
-                    <a href="post.html">
+                    <a asp-controller="Blog" asp-action="Post" asp-route-slug="@post.Slug">
                         <h2 class="post-title">@post.Title</h2>
                         <h3 class="post-subtitle">@post.ShortDescription</h3>
                     </a>
@@ -55,7 +60,17 @@
             <!-- Post preview-->
             
             <!-- Pager-->
-            <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase" href="#!">Older Posts →</a></div>
+            Page @(Model?.Posts.PageCount < Model?.Posts.PageNumber ? 0 : Model?.Posts.PageNumber) of @Model?.Posts.PageCount
+            @Html.PagedListPager(Model?.Posts,page => Url.Action("Index",
+            new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }),
+            new PagedListRenderOptions()
+            {
+            ContainerDivClasses = new List<string> {"blog","navigation"},
+            UlElementClasses = new List<string> {"pagination"},
+            LiElementClasses = new List<string> {"page-item","page-link"},
+            ActiveLiElementClass =  "active",
+            })
+
         </div>
     </div>
 </div>

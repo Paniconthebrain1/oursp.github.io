@@ -5,6 +5,7 @@ using OurSunday.Models;
 using OurSunday.ViewModel;
 using System.Diagnostics;
 using System.Drawing.Printing;
+using X.PagedList;
 
 namespace OurSunday.Controllers
 {
@@ -21,14 +22,16 @@ namespace OurSunday.Controllers
 
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int? page)
         {
             var vm = new HomeVM();
             var setting  =  _context.Settings!.ToList();
             vm.Title = setting[0].Title;
             vm.ShortDescription = setting[0].ShortDescription;
             vm.ThumbnailUrl = setting[0].ThumbnailUrl;
-            vm.Posts = _context.Posts.Include(x=> x.ApplicationUser).ToList();
+            int pagesize = 4;
+            int pagenumber = (page ?? 1);
+            vm.Posts = await _context.Posts!.Include(x => x.ApplicationUser).ToPagedListAsync(pagenumber, pagesize); 
             //vm.Posts = await _context.Posts!.Include(x => x.ApplicationUser).OrderByDescending(x => x.CreatedDate).ToPagedListAsync(pageNumber, pageSize);
 
             return View(vm);

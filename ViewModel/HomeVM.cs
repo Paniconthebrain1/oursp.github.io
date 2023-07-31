@@ -1,4 +1,5 @@
 ﻿using OurSunday.Models;
+using X.PagedList;
 
 namespace OurSunday.ViewModel
 {
@@ -7,7 +8,7 @@ namespace OurSunday.ViewModel
         public string? Title { get; set; }
         public string? ShortDescription { get; set; }
         public string? ThumbnailUrl { get; set; }
-        public List<Post>? Posts { get; set; }
+        public IPagedList<Post>? Posts { get; set; }
 
 
     }
