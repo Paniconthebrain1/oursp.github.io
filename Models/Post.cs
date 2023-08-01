@@ -1,4 +1,6 @@
-﻿namespace OurSunday.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace OurSunday.Models
 {
     public class Post
     {
