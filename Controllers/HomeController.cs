@@ -31,7 +31,7 @@ namespace OurSunday.Controllers
             vm.ThumbnailUrl = setting[0].ThumbnailUrl;
             int pagesize = 4;
             int pagenumber = (page ?? 1);
-            vm.Posts = await _context.Posts!.Include(x => x.ApplicationUser).ToPagedListAsync(pagenumber, pagesize); 
+            vm.Posts = await _context.Posts!.Include(x => x.ApplicationUser).OrderByDescending(x=>x.CreateDate).ToPagedListAsync(pagenumber, pagesize); 
             //vm.Posts = await _context.Posts!.Include(x => x.ApplicationUser).OrderByDescending(x => x.CreatedDate).ToPagedListAsync(pageNumber, pageSize);
 
             return View(vm);

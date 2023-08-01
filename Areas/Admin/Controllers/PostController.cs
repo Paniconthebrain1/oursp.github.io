@@ -8,6 +8,7 @@ using OurSunday.Models;
 using OurSunday.Utilities;
 using OurSunday.ViewModel;
 using System.Runtime.InteropServices;
+using X.PagedList;
 
 namespace OurSunday.Areas.Admin.Controllers
 {
@@ -32,8 +33,7 @@ namespace OurSunday.Areas.Admin.Controllers
 
 
         [HttpGet]
-
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
 
             var listofpost = new List<Post>();
@@ -59,7 +59,11 @@ namespace OurSunday.Areas.Admin.Controllers
 
 
             }).ToList();
-            return View(listOfPostVM);
+
+            int pagesize = 4;
+            int pagenumber = (page ?? 1);
+
+            return View(await listOfPostVM.OrderByDescending(x=>x.CreatedDate).ToPagedListAsync(pagenumber,pagesize));
         }
 
         [HttpGet]

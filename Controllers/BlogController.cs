@@ -18,7 +18,7 @@ namespace OurSunday.Controllers
             _notification = notyfService;
         }
 
-        [HttpGet]
+        [HttpGet("[controller]/{slug}")]
         public IActionResult Post(string slug)
         {
             if (slug == "")
